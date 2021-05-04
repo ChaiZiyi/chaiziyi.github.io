@@ -1,38 +1,501 @@
-{% extends '_layout.swig' %}
-{% import '_macro/post.swig' as post_template %}
-{% import '_macro/sidebar.swig' as sidebar_template %}
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico">
+  <link rel="mask-icon" href="/images/favicon.ico" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
 
 
-{% block title %}{{ page.title }} | {{ config.title }}{% endblock %}
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
 
-{% block page_class %}page-post-detail{% endblock %}
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"chaizi.one","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="做网站的缘由来自于这学期一门叫做软件项目管理的课。对于几乎没有任何实战经验的我们，要花一学期模拟一个完整项目的历程，从项目竞标到最后项目上线，而这个网站就是我们小组最后的成果了。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python+Flask完成的第一个网站">
+<meta property="og:url" content="https://chaizi.one/2016/05/28/Python+Flask%E5%AE%8C%E6%88%90%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AA%E7%BD%91%E7%AB%99/index.html">
+<meta property="og:site_name" content="crazyczy&#39;s blog">
+<meta property="og:description" content="做网站的缘由来自于这学期一门叫做软件项目管理的课。对于几乎没有任何实战经验的我们，要花一学期模拟一个完整项目的历程，从项目竞标到最后项目上线，而这个网站就是我们小组最后的成果了。">
+<meta property="og:locale">
+<meta property="article:published_time" content="2016-05-27T16:00:00.000Z">
+<meta property="article:modified_time" content="2020-02-29T13:09:20.806Z">
+<meta property="article:author" content="crazyczy">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="Flask">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://chaizi.one/2016/05/28/Python+Flask%E5%AE%8C%E6%88%90%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AA%E7%BD%91%E7%AB%99/">
 
 
-{% block content %}
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
 
-  <div id="posts" class="posts-expand">
-    {{ post_template.render(page) }}
+  <title>Python+Flask完成的第一个网站 | crazyczy's blog</title>
+  
 
-    <div class="post-spread">
-      {% if theme.jiathis %}
-        {% include '_partials/share/jiathis.swig' %}
-      {% elseif theme.baidushare %}
-        {% include '_partials/share/baidushare.swig' %}
-      {% elseif theme.add_this_id %}
-        {% include '_partials/share/add-this.swig' %}
-      {% elseif theme.duoshuo_shortname and theme.duoshuo_share %}
-        {% include '_partials/share/duoshuo_share.swig' %}
-      {% endif %}
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="crazyczy's blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
     </div>
   </div>
 
-{% endblock %}
+  <div class="site-meta">
 
-{% block sidebar %}
-  {{ sidebar_template.render(true) }}
-{% endblock %}
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">crazyczy's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
 
 
-{% block script_extra %}
-  {% include '_scripts/pages/post-details.swig' %}
-{% endblock %}
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://chaizi.one/2016/05/28/Python+Flask%E5%AE%8C%E6%88%90%E7%9A%84%E7%AC%AC%E4%B8%80%E4%B8%AA%E7%BD%91%E7%AB%99/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/lisup.jpg">
+      <meta itemprop="name" content="crazyczy">
+      <meta itemprop="description" content="Have you tried turning it off and on again?">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="crazyczy's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Python+Flask完成的第一个网站
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2016-05-28 00:00:00" itemprop="dateCreated datePublished" datetime="2016-05-28T00:00:00+08:00">2016-05-28</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E9%A1%B9%E7%9B%AE%E6%88%90%E6%9E%9C/" itemprop="url" rel="index"><span itemprop="name">项目成果</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>做网站的缘由来自于这学期一门叫做软件项目管理的课。对于几乎没有任何实战经验的我们，要花一学期模拟一个完整项目的历程，从项目竞标到最后项目上线，而这个网站就是我们小组最后的成果了。<br><span id="more"></span></p>
+<p>当初在需求说明书里我们是决定用JSP来写的，因为这学期我们也学JSP这门课，所以正好现学现用。无奈我JSP学的太烂，实在是拿不出手。正好最近看了点Flask，手有点痒，也想趁这个机会锻炼一下，于是决定用Python+Flask来试一下。更改技术方案在真正的项目是重大事故，但老师说我们这个是模拟，就不计较了。</p>
+<p>首先感谢一下女朋友写的前端页面，我是在她写的前端页面的基础上加上了后台然后略加修改做成的网站，这里面她功不可没。</p>
+<p>网站其实不是很复杂，用到数据库的主要是三个模块，一是注册登录，二是成绩管理，三是留言板。</p>
+<p>在连数据库的时候卡了挺久，一开始我是打算用<a target="_blank" rel="noopener" href="http://docs.jinkan.org/docs/flask/patterns/sqlite3.html" title="SQLite3">SQLite3</a>这个Python自带库的，后来发现了更好用的<a target="_blank" rel="noopener" href="http://docs.jinkan.org/docs/flask/patterns/sqlalchemy.html" title="SQLAlchemy">SQLAlchemy</a>库就抛弃了<a target="_blank" rel="noopener" href="http://docs.jinkan.org/docs/flask/patterns/sqlite3.html" title="SQLite3">SQLite3</a>。因为是第一次连数据库，遇到了不少困难，后来对着官方文档，再去查资料，最后总算一点点解决了。</p>
+<p>我觉得<a target="_blank" rel="noopener" href="http://docs.jinkan.org/docs/flask/patterns/sqlalchemy.html" title="SQLAlchemy">SQLAlchemy</a>的好处在于它把数据库中的表抽象成了类，每一个表就是一个类，方便管理操作。所以我需要的三个数据表其实就是三个类，这样一来事情就简单多了。</p>
+<blockquote>
+<p>注册登录</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">User</span>(<span class="params">db.Model</span>):</span></span><br><span class="line">    __tablename__ = <span class="string">&#x27;user&#x27;</span></span><br><span class="line">    <span class="built_in">id</span> = db.Column(db.Integer, primary_key=<span class="literal">True</span>)</span><br><span class="line">    name = db.Column(db.String(<span class="number">120</span>))</span><br><span class="line">    password = db.Column(db.String(<span class="number">120</span>))</span><br><span class="line">    email = db.Column(db.String(<span class="number">240</span>), unique=<span class="literal">True</span>)</span><br><span class="line">    select = db.Column(db.Integer)  <span class="comment"># 选课状态，0未选，1已选未确认，2已选已确认</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, name, email, password, select</span>):</span></span><br><span class="line">        self.name = name</span><br><span class="line">        self.email = email</span><br><span class="line">        self.set_password(password)</span><br><span class="line">        self.select = select</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">set_password</span>(<span class="params">self, password</span>):</span></span><br><span class="line">        self.password = generate_password_hash(password)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">check_password</span>(<span class="params">self, password</span>):</span></span><br><span class="line">        <span class="keyword">return</span> check_password_hash(self.password, password)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__repr__</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">&#x27;&lt;User %r&gt;&#x27;</span> % self.name</span><br></pre></td></tr></table></figure>
+<p>这个User类就是用户信息表，包括了用户名，密码，邮箱和选课状态，其中选课状态是选课模块用的。为了安全起见，密码用的hash加密。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@app.before_request</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">check_user_status</span>():</span></span><br><span class="line">    <span class="keyword">if</span> <span class="string">&#x27;user_email&#x27;</span> <span class="keyword">not</span> <span class="keyword">in</span> session:</span><br><span class="line">        session[<span class="string">&#x27;user_email&#x27;</span>] = <span class="literal">None</span></span><br><span class="line">        session[<span class="string">&#x27;user_name&#x27;</span>] = <span class="literal">None</span></span><br></pre></td></tr></table></figure>
+<p>刚开始检测<code>session</code>中是否有<code>user_name</code>，如果没有，将<code>session</code>中的<code>user_email</code>和<code>user_name</code>设为空。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">&#x27;/login&#x27;</span>, methods=(<span class="params"><span class="string">&#x27;GET&#x27;</span>, <span class="string">&#x27;POST&#x27;</span></span>)</span>)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">login</span>():</span></span><br><span class="line">    <span class="keyword">if</span> session[<span class="string">&#x27;user_email&#x27;</span>]:</span><br><span class="line">        <span class="keyword">return</span> redirect(url_for(<span class="string">&#x27;home&#x27;</span>))</span><br><span class="line">    form = LoginForm()</span><br><span class="line">    <span class="keyword">if</span> form.validate_on_submit():</span><br><span class="line">        user = User.query.filter_by(email=form.email.data).first()</span><br><span class="line">        <span class="keyword">if</span> user <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span> <span class="keyword">and</span> user.check_password(form.password.data):</span><br><span class="line">            session[<span class="string">&#x27;user_email&#x27;</span>] = form.email.data</span><br><span class="line">            session[<span class="string">&#x27;user_name&#x27;</span>] = user.name</span><br><span class="line">            <span class="keyword">return</span> redirect(url_for(<span class="string">&#x27;home&#x27;</span>))</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            flash(<span class="string">u&#x27;对不起，用户不存在或密码错误！&#x27;</span>)</span><br><span class="line">            <span class="keyword">return</span> render_template(<span class="string">&#x27;login.html&#x27;</span>, form=form)</span><br><span class="line">    <span class="keyword">return</span> render_template(<span class="string">&#x27;login.html&#x27;</span>, form=form)</span><br></pre></td></tr></table></figure>
+<p>登录——检测用户所输入的邮箱和密码是否与数据库中的匹配。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">&#x27;/signup&#x27;</span>, methods=(<span class="params"><span class="string">&#x27;GET&#x27;</span>, <span class="string">&#x27;POST&#x27;</span></span>)</span>)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">signup</span>():</span></span><br><span class="line">    <span class="keyword">if</span> session[<span class="string">&#x27;user_email&#x27;</span>]:</span><br><span class="line">        flash(<span class="string">u&#x27;你已经注册过了！&#x27;</span>)</span><br><span class="line">        <span class="keyword">return</span> redirect(url_for(<span class="string">&#x27;home&#x27;</span>))</span><br><span class="line">    form = SignupForm()</span><br><span class="line">    <span class="keyword">if</span> form.validate_on_submit():</span><br><span class="line">        user_email = User.query.filter_by(email=form.email.data).first()</span><br><span class="line">        <span class="keyword">if</span> user_email <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">            user = User(form.name.data, form.email.data,</span><br><span class="line">                        form.password.data, form.select)</span><br><span class="line">            db.session.add(user)</span><br><span class="line">            db.session.commit()</span><br><span class="line">            session[<span class="string">&#x27;user_email&#x27;</span>] = form.email.data</span><br><span class="line">            session[<span class="string">&#x27;user_name&#x27;</span>] = form.name.data</span><br><span class="line">            <span class="keyword">return</span> redirect(url_for(<span class="string">&#x27;home&#x27;</span>))</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            flash(<span class="string">u&#x27;该邮箱已被注册，请重新选择一个！&#x27;</span>, <span class="string">&#x27;error&#x27;</span>)</span><br><span class="line">            render_template(<span class="string">&#x27;signup.html&#x27;</span>, form=form)</span><br><span class="line">    <span class="keyword">return</span> render_template(<span class="string">&#x27;signup.html&#x27;</span>, form=form)</span><br></pre></td></tr></table></figure>
+<p>注册——先检验用户输入是否合法，合法则加入到数据库中，否则让用户重输。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">&#x27;/logout&#x27;</span>, methods=(<span class="params"><span class="string">&#x27;GET&#x27;</span>, <span class="string">&#x27;POST&#x27;</span></span>)</span>)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">logout</span>():</span></span><br><span class="line">    session.pop(<span class="string">&#x27;user_email&#x27;</span>, <span class="literal">None</span>)</span><br><span class="line">    session.pop(<span class="string">&#x27;user_name&#x27;</span>, <span class="literal">None</span>)</span><br><span class="line">    <span class="keyword">return</span> redirect(request.referrer <span class="keyword">or</span> url_for(<span class="string">&#x27;home&#x27;</span>))</span><br></pre></td></tr></table></figure>
+<p>注销——将<code>session</code>中的<code>user_email</code>和<code>user_name</code>置为空并回到首页。</p>
+<blockquote>
+<p>成绩管理</p>
+</blockquote>
+<p>这里用到了<a target="_blank" rel="noopener" href="http://flask-excel.readthedocs.io/en/latest/" title="Flask-Excel">Flask-Excel</a>这个模块，需求里面本来很复杂的上传excel文件导入成绩因为有了这个就简单多了。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Post</span>(<span class="params">db.Model</span>):</span></span><br><span class="line">    __tablename__ = <span class="string">&#x27;post&#x27;</span></span><br><span class="line">    <span class="built_in">id</span> = db.Column(db.Integer, primary_key=<span class="literal">True</span>)</span><br><span class="line">    name = db.Column(db.String(<span class="number">80</span>))</span><br><span class="line">    middlegrade = db.Column(db.Integer)</span><br><span class="line">    finalgrade = db.Column(db.Integer)</span><br><span class="line">    grade = db.Column(db.Integer)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, <span class="built_in">id</span>, name, middlegrade, finalgrade, grade=<span class="literal">None</span></span>):</span></span><br><span class="line">        self.<span class="built_in">id</span> = <span class="built_in">id</span></span><br><span class="line">        self.name = name</span><br><span class="line">        self.middlegrade = middlegrade</span><br><span class="line">        self.finalgrade = finalgrade</span><br><span class="line">        grade = <span class="built_in">int</span>(<span class="number">0.3</span> * middlegrade + <span class="number">0.7</span> * finalgrade + <span class="number">0.5</span>)</span><br><span class="line">        self.grade = grade</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__repr__</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">&#x27;&lt;Post %r&gt;&#x27;</span> % self.name</span><br></pre></td></tr></table></figure>
+<p>Post是成绩类，包括姓名，期中成绩，期末成绩和总成绩，其中总成绩是根据期中成绩和期末成绩计算出来的，导入的文件中可以不需要。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@app.route(<span class="params"><span class="string">&#x27;/delete&#x27;</span>, methods=[<span class="string">&#x27;GET&#x27;</span>, <span class="string">&#x27;POST&#x27;</span>]</span>)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">dodelete</span>():</span></span><br><span class="line">    Post.query.delete()</span><br><span class="line">    db.session.commit()</span><br><span class="line">    <span class="keyword">return</span> redirect(url_for(<span class="string">&#x27;grades&#x27;</span>))</span><br></pre></td></tr></table></figure>
+<p>导入和导出都是直接用的<a target="_blank" rel="noopener" href="http://flask-excel.readthedocs.io/en/latest/" title="Flask-Excel">Flask-Excel</a>里面的函数，没啥说的，这里说一下删除。这也是我卡的比较久的一个地方，因为少了<code>db.session.commit()</code>，所以其实每次删除都只是删除了<code>session</code>里面的数据而数据库中的数据并没有删掉，所以一刷新还是会有，后来发现是删除后没有提交，加上<code>db.session.commit()</code>就OK了。</p>
+<blockquote>
+<p>留言板</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Thread</span>(<span class="params">db.Model</span>):</span></span><br><span class="line">    <span class="built_in">id</span> = db.Column(db.Integer, primary_key=<span class="literal">True</span>)</span><br><span class="line">    email = db.Column(db.String(<span class="number">240</span>))</span><br><span class="line">    title = db.Column(db.String(<span class="number">100</span>))</span><br><span class="line">    body = db.Column(db.Text)</span><br><span class="line">    date = db.Column(db.String(<span class="number">100</span>))</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self, title, body</span>):</span></span><br><span class="line">        self.email = session[<span class="string">&#x27;user_email&#x27;</span>]</span><br><span class="line">        self.title = title</span><br><span class="line">        self.body = body</span><br><span class="line">        self.date = (datetime.utcnow() + timedelta(hours=<span class="number">8</span>)).strftime(<span class="string">&#x27;%Y-%m-%d %H:%M:%S&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__repr__</span>(<span class="params">self</span>):</span></span><br><span class="line">        <span class="keyword">return</span> <span class="string">&#x27;&lt;Thread Title %r&gt;&#x27;</span> % self.title</span><br></pre></td></tr></table></figure>
+<p>留言板的数据库也大同小异，但其中留言时间用<code>datetime.utcnow()</code>获取到的是标准时而不是本地时间，用<code>timedelta()</code>函数解决即可，然后去掉后面的微秒显示成正常的时间格式。</p>
+<p>其余没用到数据库的太简单就不说了。</p>
+<p><del>最后由于老师要求部署到服务器，所以我挂到了服务器上，网站地址是<a target="_blank" rel="noopener" href="http://spm.chaiziyi.com.cn/" title="http://spm.chaiziyi.com.cn/">http://spm.chaiziyi.com.cn/</a>。</del>（2016.10.31更新：为了部署另一个Django网站，把服务器搞崩了，之前的这个网站就访问不了了，本来还想有空再部署上去的，但是看了眼自己以前写的烂代码，还是算了……）网站部署可参照<a target="_blank" rel="noopener" href="http://www.cnblogs.com/Ray-liang/p/4173923.html" title="阿里云部署 Flask + WSGI + Nginx 详解">阿里云部署 Flask + WSGI + Nginx 详解</a>这篇文章。</p>
+<p>源码及使用说明见<a target="_blank" rel="noopener" href="https://github.com/crazyczy/spm-web" title="https://github.com/crazyczy/spm-web">https://github.com/crazyczy/spm-web</a></p>
+<p>从这次写网站的经历中学到了好多东西，包括<a target="_blank" rel="noopener" href="http://docs.jinkan.org/docs/flask/patterns/sqlalchemy.html" title="SQLAlchemy">SQLAlchemy</a>的使用等等，当然最大的收获还是学会了如何部署Flask项目到服务器，虽然部署时磕磕绊绊，但是有了第一次部署的经验，以后应该都会简单多了吧。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Python/" rel="tag"># Python</a>
+              <a href="/tags/Flask/" rel="tag"># Flask</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2016/05/15/%E6%88%91%E4%B8%8EPython%E7%9A%84%E7%BC%98%E5%88%86/" rel="prev" title="我与Python的缘分">
+      <i class="fa fa-chevron-left"></i> 我与Python的缘分
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2016/06/22/%E7%94%A8Python%E5%86%99%E4%BA%86%E4%B8%80%E4%B8%AA%E6%A0%A1%E5%9B%AD%E7%BD%91%E8%87%AA%E5%8A%A8%E7%99%BB%E5%BD%95%E5%99%A8/" rel="next" title="用Python写了一个校园网自动登录器">
+      用Python写了一个校园网自动登录器 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="crazyczy"
+      src="/uploads/lisup.jpg">
+  <p class="site-author-name" itemprop="name">crazyczy</p>
+  <div class="site-description" itemprop="description">Have you tried turning it off and on again?</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">28</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/crazyczy" title="GitHub → https://github.com/crazyczy" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:crazyczy@live.cn" title="E-mail → mailto:crazyczy@live.cn" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-mail</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://ashunana.github.io" title="http://ashunana.github.io" rel="noopener" target="_blank">Ashuna</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2016 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">crazyczy</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

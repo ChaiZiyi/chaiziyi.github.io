@@ -1,38 +1,483 @@
-{% extends '_layout.swig' %}
-{% import '_macro/post.swig' as post_template %}
-{% import '_macro/sidebar.swig' as sidebar_template %}
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico">
+  <link rel="mask-icon" href="/images/favicon.ico" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
 
 
-{% block title %}{{ page.title }} | {{ config.title }}{% endblock %}
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
 
-{% block page_class %}page-post-detail{% endblock %}
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"chaizi.one","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="之前一直写的是在控制台运行的Python程序，昨天突发奇想，能不能用Python写GUI呢？一查还真可以，PyQt，wxPython，TkInter都是不错的库，权衡了一下我决定用wxPython来写点小东西玩一下。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="用wxPython写了一个证件照查看器">
+<meta property="og:url" content="https://chaizi.one/2016/10/23/%E7%94%A8wxPython%E5%86%99%E4%BA%86%E4%B8%80%E4%B8%AA%E8%AF%81%E4%BB%B6%E7%85%A7%E6%9F%A5%E7%9C%8B%E5%99%A8/index.html">
+<meta property="og:site_name" content="crazyczy&#39;s blog">
+<meta property="og:description" content="之前一直写的是在控制台运行的Python程序，昨天突发奇想，能不能用Python写GUI呢？一查还真可以，PyQt，wxPython，TkInter都是不错的库，权衡了一下我决定用wxPython来写点小东西玩一下。">
+<meta property="og:locale">
+<meta property="og:image" content="https://i.imgur.com/IUnRHx1.png">
+<meta property="og:image" content="https://i.imgur.com/ceaTwQT.png">
+<meta property="article:published_time" content="2016-10-22T16:00:00.000Z">
+<meta property="article:modified_time" content="2020-02-29T13:12:58.532Z">
+<meta property="article:author" content="crazyczy">
+<meta property="article:tag" content="Python">
+<meta property="article:tag" content="wxPython">
+<meta property="article:tag" content="GUI">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.imgur.com/IUnRHx1.png">
+
+<link rel="canonical" href="https://chaizi.one/2016/10/23/%E7%94%A8wxPython%E5%86%99%E4%BA%86%E4%B8%80%E4%B8%AA%E8%AF%81%E4%BB%B6%E7%85%A7%E6%9F%A5%E7%9C%8B%E5%99%A8/">
 
 
-{% block content %}
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
 
-  <div id="posts" class="posts-expand">
-    {{ post_template.render(page) }}
+  <title>用wxPython写了一个证件照查看器 | crazyczy's blog</title>
+  
 
-    <div class="post-spread">
-      {% if theme.jiathis %}
-        {% include '_partials/share/jiathis.swig' %}
-      {% elseif theme.baidushare %}
-        {% include '_partials/share/baidushare.swig' %}
-      {% elseif theme.add_this_id %}
-        {% include '_partials/share/add-this.swig' %}
-      {% elseif theme.duoshuo_shortname and theme.duoshuo_share %}
-        {% include '_partials/share/duoshuo_share.swig' %}
-      {% endif %}
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="crazyczy's blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
     </div>
   </div>
 
-{% endblock %}
+  <div class="site-meta">
 
-{% block sidebar %}
-  {{ sidebar_template.render(true) }}
-{% endblock %}
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">crazyczy's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
 
 
-{% block script_extra %}
-  {% include '_scripts/pages/post-details.swig' %}
-{% endblock %}
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://chaizi.one/2016/10/23/%E7%94%A8wxPython%E5%86%99%E4%BA%86%E4%B8%80%E4%B8%AA%E8%AF%81%E4%BB%B6%E7%85%A7%E6%9F%A5%E7%9C%8B%E5%99%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/lisup.jpg">
+      <meta itemprop="name" content="crazyczy">
+      <meta itemprop="description" content="Have you tried turning it off and on again?">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="crazyczy's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          用wxPython写了一个证件照查看器
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2016-10-23 00:00:00" itemprop="dateCreated datePublished" datetime="2016-10-23T00:00:00+08:00">2016-10-23</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E9%A1%B9%E7%9B%AE%E6%88%90%E6%9E%9C/" itemprop="url" rel="index"><span itemprop="name">项目成果</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>之前一直写的是在控制台运行的Python程序，昨天突发奇想，能不能用Python写GUI呢？一查还真可以，PyQt，wxPython，TkInter都是不错的库，权衡了一下我决定用wxPython来写点小东西玩一下。<br><span id="more"></span></p>
+<p>之前在<a href="/2016/06/03/利用Python爬取学校网站上的证件照（四）/" title="利用Python爬取学校网站上的证件照（四）">利用Python爬取学校网站上的证件照（四）</a>这篇博客里提到学校教务系统存在越权访问漏洞，不如就根据这个来写一个学校证件照查看器吧。</p>
+<p>原理很简单，只要根据学号构造出正确的url就可以获取相应的证件照了，难点在于我对于Python的GUI编程一无所知，所以只能一边查文档一边写。</p>
+<p>遇到的第一个问题是事件绑定以后的值传递，我把文本框的<code>wx.EVT_TEXT</code>事件和显示图片函数绑定以后，不知道怎么把文本框的值传给函数，因为我需要根据输入值来构造url，所以没有这个值就什么也干不了。后来我发现可以传过来一个CommandEvent类型的东西，再对它<code>GetString()</code>一下就可以获得我想要的值了。</p>
+<p>第二个问题是图片的获取问题，<code>wx.Image</code>函数的第一个参数是一个本地图片路径的字符串，可是我的图片是从网上获得的，直接传url给函数会报错。一开始我想先把图片下到本地，然后显示了以后再把本地图片删掉，但是总觉得这样有点蠢，而且如果用户有同名的文件还会误删。后来继续查，发线可以用<code>wx.ImageFromStream</code>这个函数来获取图片流，又解决了一个问题。</p>
+<p>最后就是控件的位置摆放了，虽然没几个控件，但要是摆好看还真不容易。用了<code>wx.FlexGridSizer</code>但感觉总得不到我想要的结果，最后干脆直接用绝对坐标写死在代码里了。</p>
+<p>代码没多少行，但真的比非GUI的Python程序难写多了，本来Python是一门很简洁的语言，但到了GUI这里就一点都不简洁了。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- coding: utf-8 -*-</span></span><br><span class="line"><span class="keyword">import</span> wx</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">from</span> cStringIO <span class="keyword">import</span> StringIO</span><br><span class="line"></span><br><span class="line">url = <span class="string">&#x27;http://223.2.10.123/jwgl/photos/rx20&#x27;</span></span><br><span class="line"></span><br><span class="line">header = &#123;<span class="string">&#x27;User-Agent&#x27;</span>: <span class="string">&#x27;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit\</span></span><br><span class="line"><span class="string">/537.36 (KHTML, like Gecko) Chrome/49.0.2623.112 Safari/537.36&#x27;</span>&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Frame</span>(<span class="params">wx.Frame</span>):</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span>(<span class="params">self</span>):</span></span><br><span class="line">        wx.Frame.__init__(self, <span class="literal">None</span>, -<span class="number">1</span>, <span class="string">u&#x27;南师大证件照查看器&#x27;</span>,</span><br><span class="line">                          size=(<span class="number">300</span>, <span class="number">360</span>))</span><br><span class="line">        self.Centre()</span><br><span class="line">        hbox = wx.BoxSizer(wx.HORIZONTAL)</span><br><span class="line">        panel1 = wx.Panel(self, -<span class="number">1</span>)</span><br><span class="line">        sizer = wx.FlexGridSizer(<span class="number">1</span>, <span class="number">2</span>, <span class="number">10</span>, <span class="number">10</span>)</span><br><span class="line">        basicLabel = wx.StaticText(panel1, -<span class="number">1</span>, <span class="string">u&#x27;请输入要查询的学号：&#x27;</span>)</span><br><span class="line">        basicText = wx.TextCtrl(panel1, -<span class="number">1</span>, size=(<span class="number">100</span>, <span class="number">18</span>))</span><br><span class="line">        basicText.SetInsertionPoint(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">        self.Bind(wx.EVT_TEXT, self.showImage, basicText)</span><br><span class="line"></span><br><span class="line">        sizer.AddMany([basicLabel, basicText])</span><br><span class="line">        hbox.Add(sizer, proportion=<span class="number">2</span>, flag=wx.ALL | wx.EXPAND, border=<span class="number">15</span>)</span><br><span class="line">        panel1.SetSizer(hbox)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">showImage</span>(<span class="params">self, text</span>):</span></span><br><span class="line">        panel2 = wx.Panel(self, -<span class="number">1</span>, (<span class="number">70</span>, <span class="number">50</span>), (<span class="number">150</span>, <span class="number">210</span>))</span><br><span class="line">        panel2.Refresh()</span><br><span class="line">        <span class="built_in">id</span> = text.GetString()</span><br><span class="line">        year = <span class="built_in">id</span>[<span class="number">2</span>:<span class="number">4</span>]</span><br><span class="line">        name = <span class="built_in">id</span> + <span class="string">&#x27;.jpg&#x27;</span></span><br><span class="line">        turl = url + year + <span class="string">&#x27;/&#x27;</span> + name</span><br><span class="line">        req = requests.get(turl, headers=header)</span><br><span class="line">        <span class="keyword">if</span> req.headers.get(<span class="string">&#x27;content-length&#x27;</span>) != <span class="string">&#x27;1163&#x27;</span>:</span><br><span class="line">            image = wx.ImageFromStream(</span><br><span class="line">                StringIO(req.content), wx.BITMAP_TYPE_ANY)</span><br><span class="line">            temp = image.ConvertToBitmap()</span><br><span class="line">            wx.StaticBitmap(parent=panel2, bitmap=temp)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&#x27;__main__&#x27;</span>:</span><br><span class="line">    app = wx.App()</span><br><span class="line">    frame = Frame()</span><br><span class="line">    frame.Show()</span><br><span class="line">    app.MainLoop()</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p><img src="https://i.imgur.com/IUnRHx1.png" alt=""></p>
+<p><img src="https://i.imgur.com/ceaTwQT.png" alt=""></p>
+<p>跟上次那个校园网自动登录器一样，我也生成了一个exe文件方便没有安装Python环境的用户使用，这次还特地用32位的Python生成的，所以这个exe就能通用了哈哈。</p>
+<p><strong>下载地址</strong>：<a target="_blank" rel="noopener" href="https://github.com/crazyczy/njnu-passport-inquiry/releases/download/1.0/NJNU_Passport_Inquiry.exe" title="NJNU_Passport_Inquiry.exe">NJNU_Passport_Inquiry.exe</a></p>
+<p>因为这个程序太简单，所以wxPython还有很多好玩的的函数我都没有用到，下次写GUI程序的时候再看看吧，不过写GUI真的好晕，就不知道下次什么时候写了……</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Python/" rel="tag"># Python</a>
+              <a href="/tags/wxPython/" rel="tag"># wxPython</a>
+              <a href="/tags/GUI/" rel="tag"># GUI</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2016/10/22/%E6%A0%A1%E5%9B%AD%E7%BD%91%E6%8D%A2%E4%BA%86%E8%AE%A4%E8%AF%81%E9%A1%B5%E9%9D%A2%E4%BB%A5%E5%90%8E/" rel="prev" title="校园网换了认证页面以后">
+      <i class="fa fa-chevron-left"></i> 校园网换了认证页面以后
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2016/10/24/Python%E5%AE%9E%E7%8E%B0%E6%95%99%E5%8A%A1%E7%B3%BB%E7%BB%9F%E5%BF%AB%E9%80%9F%E6%9F%A5%E5%88%86%EF%BC%88%E4%B8%80%EF%BC%89/" rel="next" title="Python实现教务系统快速查分（一）">
+      Python实现教务系统快速查分（一） <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="crazyczy"
+      src="/uploads/lisup.jpg">
+  <p class="site-author-name" itemprop="name">crazyczy</p>
+  <div class="site-description" itemprop="description">Have you tried turning it off and on again?</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">28</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/crazyczy" title="GitHub → https://github.com/crazyczy" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:crazyczy@live.cn" title="E-mail → mailto:crazyczy@live.cn" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-mail</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://ashunana.github.io" title="http://ashunana.github.io" rel="noopener" target="_blank">Ashuna</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2016 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">crazyczy</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

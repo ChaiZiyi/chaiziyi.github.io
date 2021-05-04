@@ -1,38 +1,484 @@
-{% extends '_layout.swig' %}
-{% import '_macro/post.swig' as post_template %}
-{% import '_macro/sidebar.swig' as sidebar_template %}
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 5.4.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.ico">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.ico">
+  <link rel="mask-icon" href="/images/favicon.ico" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
 
 
-{% block title %}{{ page.title }} | {{ config.title }}{% endblock %}
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
 
-{% block page_class %}page-post-detail{% endblock %}
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"chaizi.one","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="为了更方便的看视频，把视频放到云端是一个再好不过的方法。云端有两种，一种是局域网，一种是公网。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="为了能更方便地看云端视频">
+<meta property="og:url" content="https://chaizi.one/2018/03/22/%E4%B8%BA%E4%BA%86%E8%83%BD%E6%9B%B4%E6%96%B9%E4%BE%BF%E5%9C%B0%E7%9C%8B%E4%BA%91%E7%AB%AF%E8%A7%86%E9%A2%91/index.html">
+<meta property="og:site_name" content="crazyczy&#39;s blog">
+<meta property="og:description" content="为了更方便的看视频，把视频放到云端是一个再好不过的方法。云端有两种，一种是局域网，一种是公网。">
+<meta property="og:locale">
+<meta property="og:image" content="https://i.imgur.com/B38yyzL.png">
+<meta property="og:image" content="https://i.imgur.com/PdHN36m.jpg">
+<meta property="og:image" content="https://i.imgur.com/oePfwwm.png">
+<meta property="article:published_time" content="2018-03-21T16:00:00.000Z">
+<meta property="article:modified_time" content="2020-02-29T13:10:17.943Z">
+<meta property="article:author" content="crazyczy">
+<meta property="article:tag" content="samba">
+<meta property="article:tag" content="nextcloud">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.imgur.com/B38yyzL.png">
+
+<link rel="canonical" href="https://chaizi.one/2018/03/22/%E4%B8%BA%E4%BA%86%E8%83%BD%E6%9B%B4%E6%96%B9%E4%BE%BF%E5%9C%B0%E7%9C%8B%E4%BA%91%E7%AB%AF%E8%A7%86%E9%A2%91/">
 
 
-{% block content %}
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
 
-  <div id="posts" class="posts-expand">
-    {{ post_template.render(page) }}
+  <title>为了能更方便地看云端视频 | crazyczy's blog</title>
+  
 
-    <div class="post-spread">
-      {% if theme.jiathis %}
-        {% include '_partials/share/jiathis.swig' %}
-      {% elseif theme.baidushare %}
-        {% include '_partials/share/baidushare.swig' %}
-      {% elseif theme.add_this_id %}
-        {% include '_partials/share/add-this.swig' %}
-      {% elseif theme.duoshuo_shortname and theme.duoshuo_share %}
-        {% include '_partials/share/duoshuo_share.swig' %}
-      {% endif %}
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="crazyczy's blog" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
     </div>
   </div>
 
-{% endblock %}
+  <div class="site-meta">
 
-{% block sidebar %}
-  {{ sidebar_template.render(true) }}
-{% endblock %}
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">crazyczy's blog</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
 
 
-{% block script_extra %}
-  {% include '_scripts/pages/post-details.swig' %}
-{% endblock %}
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>About</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>Categories</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>Search
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="Searching..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="https://chaizi.one/2018/03/22/%E4%B8%BA%E4%BA%86%E8%83%BD%E6%9B%B4%E6%96%B9%E4%BE%BF%E5%9C%B0%E7%9C%8B%E4%BA%91%E7%AB%AF%E8%A7%86%E9%A2%91/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/uploads/lisup.jpg">
+      <meta itemprop="name" content="crazyczy">
+      <meta itemprop="description" content="Have you tried turning it off and on again?">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="crazyczy's blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          为了能更方便地看云端视频
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2018-03-22 00:00:00" itemprop="dateCreated datePublished" datetime="2018-03-22T00:00:00+08:00">2018-03-22</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%AE%9E%E6%88%98%E7%BB%8F%E9%AA%8C/" itemprop="url" rel="index"><span itemprop="name">实战经验</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>为了更方便的看视频，把视频放到云端是一个再好不过的方法。云端有两种，一种是局域网，一种是公网。<br><span id="more"></span></p>
+<h1 id="方案篇"><a href="#方案篇" class="headerlink" title="方案篇"></a>方案篇</h1><p>先说局域网，现在市面上的很多路由器都支持外部存储，这就相当于在局域网里搭建了一个共享文件中转站。虽然有更好的NAS解决方案，但是苦于囊中羞涩，我选择了廉价的极路由来搭建我的局域网文件中转站。之前我用过极1s，但是那个只能用SD卡作为存储，不够方便，于是我又从闲鱼上收了一个极2，这一款相比于极1s多了USB接口，可以把我闲置的U盘利用起来。极路由默认使用的是samba协议进行文件传输，当然也可以装插件来实现FTP的文件共享。</p>
+<p><img src="https://i.imgur.com/B38yyzL.png" alt=""></p>
+<p>公网上我在服务器上搭了一套nextcloud，nextcloud是一套开源的私有云解决方案，支持全平台的设备。换句话说，我放在nextcloud上的视频可以在任何能联网的设备上观看，这就很符合我的心意了哈哈。nextcloud虽然支持全平台，但是实现方案都是同步盘，相当于还是把视频下到本地来看，除了web端并不能直接在线播放，但是web端的在线播放也有弊端，用的h5的原生播放器，功能很是简陋。但是nextcloud提供了WebDAV的访问方式，这个可以结合其他软件使用。</p>
+<p><img src="https://i.imgur.com/PdHN36m.jpg" alt=""></p>
+<p>局域网文件中转站的好处是传输速度快，但是缺点也显而易见，就是只能在局域网内分享文件。公网上的视频文件可以在任何可以联网的地方看，但是传输速度受限与服务器的带宽。总之各有利弊吧。</p>
+<h1 id="软件篇"><a href="#软件篇" class="headerlink" title="软件篇"></a>软件篇</h1><p>说完云端的两种存储方案，再来谈谈各个平台设备上可以观看云端视频的软件吧。</p>
+<p>先说最常用的Windows平台，Windows平台上在资源管理器就可以直接打开samba的文件，播放器方面首推Potplayer，除了支持上面所说的WebDAV的访问方式，还支持HTTP和FTP的远程访问方式，可以说很强大了。</p>
+<p>Mac OS平台上暂时未找到好用的支持远程的播放器，但是Finder里是可以直接打开samba协议的视频的，不过速度有点慢，体验不是很好。</p>
+<p>IOS端强烈推荐nplayer，功能强大，支持包括WebDAV，FTP，SFTP及samba等各种远程协议的视频播放，反正是我用过的最好的播放器了。</p>
+<p>nplayer最近也出了Android端，但是目前只有GP上可以下载，而且售价不菲。<del>在Android上我们可以选择ES+MXPlayer的方案，虽然麻烦一点，但是至少不需要下载下来就可以看啦。</del>(2018.4.2更新，Android上发现了更好用的VLC播放器，支持Samba，FTP，SFTP，NFS等多种远程协议，也支持倍速播放)</p>
+<p><img src="https://i.imgur.com/oePfwwm.png" alt=""></p>
+<p>另外还有一个叫kodi的软件也是支持全平台的，但是软件风格我感觉装在Android盒子上会更合适一点，晚点可以在我的Remix mini上试一试。</p>
+<p>为了能看云端视频真是煞费苦心，但是即使这样传输速度过慢还是很影响体验，以后有钱了还是直接搞一套NAS吧，毕竟千兆万兆普及的时代应该不远了吧。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/samba/" rel="tag"># samba</a>
+              <a href="/tags/nextcloud/" rel="tag"># nextcloud</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2017/09/23/Supervisor%E4%B8%8D%E5%AE%8C%E5%85%A8%E5%A1%AB%E5%9D%91%E6%8C%87%E5%8C%97/" rel="prev" title="Supervisor不完全填坑指北">
+      <i class="fa fa-chevron-left"></i> Supervisor不完全填坑指北
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2019/05/29/%E7%BD%91%E6%98%93%E4%BA%91%E9%9F%B3%E4%B9%90%E6%AD%8C%E5%8D%95%E4%B8%8B%E8%BD%BD/" rel="next" title="网易云音乐歌单下载">
+      网易云音乐歌单下载 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%96%B9%E6%A1%88%E7%AF%87"><span class="nav-number">1.</span> <span class="nav-text">方案篇</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%BD%AF%E4%BB%B6%E7%AF%87"><span class="nav-number">2.</span> <span class="nav-text">软件篇</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="crazyczy"
+      src="/uploads/lisup.jpg">
+  <p class="site-author-name" itemprop="name">crazyczy</p>
+  <div class="site-description" itemprop="description">Have you tried turning it off and on again?</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">28</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">categories</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">23</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/crazyczy" title="GitHub → https://github.com/crazyczy" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:crazyczy@live.cn" title="E-mail → mailto:crazyczy@live.cn" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-mail</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      Links
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://ashunana.github.io" title="http://ashunana.github.io" rel="noopener" target="_blank">Ashuna</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2016 – 
+  <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">crazyczy</span>
+</div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
